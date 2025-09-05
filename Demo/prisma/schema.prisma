@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Log {
+  id         Int       @id @default(autoincrement())
+  timestamp  DateTime  @default(now()) @db.DateTime(3)
+  level      Log_level
+  message    String    @db.VarChar(255) // ✅ Corrected line
+
+  // Contextual information
+  userId     String?
+  method     String?
+  route      String?
+  statusCode Int?
+  stack      String?   @db.Text
+}
+
+enum Log_level {
+  error
+  warn
+  info
+  http
+  verbose
+  debug
+  silly
+}
